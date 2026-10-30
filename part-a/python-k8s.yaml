@@ -1,0 +1,57 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-web
+  namespace: ica-part-a
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: python-web
+
+  template:
+    metadata:
+      labels:
+        app: python-web
+
+    spec:
+      containers:
+        - name: web
+          image: ica-part-a:v0.1.0
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 8080
+
+          envFrom:
+            - configMapRef:
+                name: part-a-config
+            - secretRef:
+                name: part-a-secret
+
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              memory: 256Mi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-web
+  namespace: ica-part-a
+
+spec:
+  type: ClusterIP
+
+  selector:
+    app: python-web
+
+  ports:
+    - port: 8080
+      targetPort: 8080

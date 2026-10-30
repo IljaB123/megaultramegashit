@@ -1,0 +1,48 @@
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: incident-7-secret
+  namespace: ica-training
+type: Opaque
+stringData:
+  POSTGRES_PASSWORD: "training-only-password"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: incident-7
+  namespace: ica-training
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: incident-7
+
+  template:
+    metadata:
+      labels:
+        app: incident-7
+
+    spec:
+      containers:
+        - name: web
+          image: python:3.12-slim-bookworm
+
+          command:
+            - python
+            - -m
+            - http.server
+            - "8080"
+
+          ports:
+            - containerPort: 8080
+
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: incident-7-secret
+                  key: POSTGRES_PASSWORD

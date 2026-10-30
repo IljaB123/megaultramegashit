@@ -1,0 +1,11 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: part-a-config
+  namespace: ica-part-a
+
+data:
+  DB_HOST: "postgres"
+  DB_NAME: "appdb"
+  DB_USER: "appuser"

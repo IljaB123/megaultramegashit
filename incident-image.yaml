@@ -1,0 +1,26 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: incident-image
+  namespace: ica-training
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: incident-image
+  template:
+    metadata:
+      labels:
+        app: incident-image
+    spec:
+      containers:
+        - name: web
+          image: python:3.12-slim-bookworm
+          command:
+            - python
+            - -m
+            - http.server
+            - "8080"
+          ports:
+            - containerPort: 8080

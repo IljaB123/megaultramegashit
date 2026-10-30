@@ -1,0 +1,17 @@
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: incident-9
+  namespace: ica-training
+
+spec:
+  type: ClusterIP
+
+  selector:
+    app: incident-8
+
+  ports:
+    - port: 8080
+      targetPort:  8080
+      protocol: TCP

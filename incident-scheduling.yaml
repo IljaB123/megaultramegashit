@@ -1,0 +1,36 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: incident-scheduling
+  namespace: ica-training
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: incident-scheduling
+
+  template:
+    metadata:
+      labels:
+        app: incident-scheduling
+
+    spec:
+      containers:
+        - name: web
+          image: python:3.12-slim-bookworm
+
+          command:
+            - python
+            - -m
+            - http.server
+            - "8080"
+
+          ports:
+            - containerPort: 8080
+
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 100m

@@ -1,0 +1,50 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: incident-5
+  namespace: ica-training
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: incident-5
+
+  template:
+    metadata:
+      labels:
+        app: incident-5
+
+    spec:
+      containers:
+        - name: web
+          image: python:3.12-slim-bookworm
+
+          env:
+              - name: APP_MESSAGE
+                value: "Hello from Kubernetes"
+
+          command:
+            - python
+            - -u
+            - -c
+
+          args:
+            - |
+              import os
+              from http.server import HTTPServer, SimpleHTTPRequestHandler
+
+              print("Starting web application")
+
+              message = os.environ["APP_MESSAGE"]
+              print("Configuration:", message)
+
+              HTTPServer(
+                  ("0.0.0.0", 8080),
+                  SimpleHTTPRequestHandler
+              ).serve_forever()
+
+          ports:
+            - containerPort: 8080
